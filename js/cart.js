@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", loadCart);
 function loadCart() {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const items = document.getElementById("cart-items");
-    const checkoutButton = document.querySelector('a.btn[href="/checkout.html"]');
+    const checkoutButton = document.querySelector('a.btn[href="checkout.html"]');
     let subtotal = 0;
     items.innerHTML = "";
 

@@ -108,9 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
         updateCartCount();
     }
 
-    if (location.pathname.includes("/admin-login") || location.pathname.includes("/admin-login.html") || !location.pathname.includes("/admin-dashboard") && !location.pathname.includes("/admin-dashboard.html")) {
+    if (location.pathname.includes("admin-login") || location.pathname.includes("admin-login.html") || !location.pathname.includes("admin-dashboard") && !location.pathname.includes("admin-dashboard.html")) {
         initLoginEventBindings();
-    } else if (location.pathname.includes("/admin-dashboard") || location.pathname.includes("/admin-dashboard.html")) {
+    } else if (location.pathname.includes("admin-dashboard") || location.pathname.includes("admin-dashboard.html")) {
         initDashboardCore();
     }
 });
@@ -199,7 +199,7 @@ async function login() {
 
         if (result.success) {
             localStorage.setItem("adminToken", result.token);
-            window.location.href = "/admin-dashboard.html";
+            window.location.href = "admin-dashboard.html";
             return;
         }
 
@@ -277,7 +277,7 @@ async function verifyOTP() {
 
         if (result.success) {
             localStorage.setItem("adminToken", result.token);
-            window.location.href = "/admin-dashboard.html";
+            window.location.href = "admin-dashboard.html";
             return;
         }
 
@@ -298,7 +298,7 @@ function setLoadingState(element, isLoading, textContent) {
 
 function logout() {
     localStorage.removeItem("adminToken");
-    window.location.href = "/admin-login.html";
+    window.location.href = "admin-login.html";
 }
 
 function getAdminToken() {
@@ -308,7 +308,7 @@ function getAdminToken() {
 async function authAdmin() {
     const token = getAdminToken();
     if (!token) {
-        window.location.href = "/admin-login.html";
+        window.location.href = "admin-login.html";
         return false;
     }
 

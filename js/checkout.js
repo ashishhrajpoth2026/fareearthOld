@@ -192,18 +192,31 @@ return;
 
 }
 
+// Show processing overlay
+const overlay = document.getElementById("checkout-processing-overlay");
+const btn = document.getElementById("place-order-btn");
+if (overlay) overlay.classList.remove("hidden");
+if (btn) btn.classList.add("processing");
+
+function hideProcessing() {
+if (overlay) overlay.classList.add("hidden");
+if (btn) btn.classList.remove("processing");
+}
+
 const addressStreet = document.getElementById("addressStreet").value.trim();
 const city = document.getElementById("city").value.trim();
 const state = document.getElementById("state").value.trim();
 const zipcode = document.getElementById("zipcode").value.trim();
 
 if(!addressStreet || !city || !state || !zipcode){
+hideProcessing();
 alert("Please complete your shipping address with street, city, state, and zip code.");
 return;
 }
 
 const agreeTerms = document.getElementById("agree-terms");
 if(!agreeTerms || !agreeTerms.checked){
+hideProcessing();
 alert("You must agree to the Terms & Conditions, Privacy Policy, and Refund Policy before placing your order.");
 return;
 }
@@ -291,6 +304,8 @@ result.orderId;
 
 }
 else{
+
+hideProcessing();
 
 alert(
 result.message

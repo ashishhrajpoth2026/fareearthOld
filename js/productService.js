@@ -37,7 +37,7 @@ async function getAllProducts() {
 async function _loadProductsFromJSON() {
     const jsonUrl = (typeof CONFIG !== 'undefined' && CONFIG.PRODUCTS_JSON_URL)
         ? CONFIG.PRODUCTS_JSON_URL
-        : '/products.json';
+        : 'products.json';
 
     try {
         const response = await fetch(jsonUrl, {

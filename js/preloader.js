@@ -55,7 +55,7 @@
         try {
             const url = (typeof CONFIG !== 'undefined' && CONFIG.PRODUCTS_JSON_URL)
                 ? CONFIG.PRODUCTS_JSON_URL
-                : '/products.json';
+                : 'products.json';
             const resp = await fetch(url, { method: 'GET' });
             const data = await resp.json();
             if (data && data.success && Array.isArray(data.products)) {
