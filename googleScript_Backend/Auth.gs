@@ -205,10 +205,33 @@ function sendOTP(email) {
 
     ]);
 
-    sendOTPEmail(
-      email,
-      otp
-    );
+    // Send the OTP email and capture result
+    const emailSent =
+      sendOTPEmail(
+        email,
+        otp
+      );
+
+    if (!emailSent) {
+
+      Logger.log(
+        "WARNING: OTP saved to sheet but sendOTPEmail returned false for " +
+        email
+      );
+
+      // Return success anyway since OTP is in the sheet
+      return {
+
+        success: true,
+
+        warning: true,
+
+        message:
+          "OTP generated. Email delivery may be delayed. If you don't receive it, please contact support."
+
+      };
+
+    }
 
     return {
 

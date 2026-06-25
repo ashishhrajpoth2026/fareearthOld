@@ -52,22 +52,70 @@ function sendOTPEmail(
 
       "</div>";
 
-    MailApp.sendEmail({
+    // Try MailApp first (standard service)
+    try {
 
-      to: email,
+      MailApp.sendEmail({
 
-      subject: subject,
+        to: email,
 
-      htmlBody: htmlBody
+        subject: subject,
 
-    });
+        htmlBody: htmlBody
 
-    return true;
+      });
+
+      Logger.log(
+        "MailApp.sendEmail succeeded for OTP to " + email
+      );
+
+      return true;
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for OTP to " + email + ": " + mailAppErr.toString()
+      );
+
+      // Fallback to GmailApp
+      try {
+
+        GmailApp.sendEmail(
+
+          email,
+
+          subject,
+
+          "", // plain text body (empty since we use htmlBody)
+
+          {
+            htmlBody: htmlBody
+          }
+
+        );
+
+        Logger.log(
+          "GmailApp.sendEmail fallback succeeded for OTP to " + email
+        );
+
+        return true;
+
+      } catch (gmailAppErr) {
+
+        Logger.log(
+          "GmailApp fallback also failed for OTP to " + email + ": " + gmailAppErr.toString()
+        );
+
+        return false;
+
+      }
+
+    }
 
   } catch (err) {
 
     Logger.log(
-      err.toString()
+      "sendOTPEmail unexpected error: " + err.toString()
     );
 
     return false;
@@ -124,15 +172,40 @@ function sendOrderConfirmationEmail(
 
       "</div>";
 
-    MailApp.sendEmail({
+    try {
 
-      to: email,
+      MailApp.sendEmail({
 
-      subject: subject,
+        to: email,
 
-      htmlBody: htmlBody
+        subject: subject,
 
-    });
+        htmlBody: htmlBody
+
+      });
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for order confirmation to " + email + ": " + mailAppErr.toString()
+      );
+
+      // Fallback to GmailApp
+      GmailApp.sendEmail(
+
+        email,
+
+        subject,
+
+        "",
+
+        {
+          htmlBody: htmlBody
+        }
+
+      );
+
+    }
 
     notifyAdminNewOrder(
       orderId,
@@ -145,7 +218,7 @@ function sendOrderConfirmationEmail(
   } catch (err) {
 
     Logger.log(
-      err.toString()
+      "sendOrderConfirmationEmail error: " + err.toString()
     );
 
     return false;
@@ -185,23 +258,47 @@ function notifyAdminNewOrder(
       Number(total).toFixed(2) +
       "</p>";
 
-    MailApp.sendEmail({
+    try {
 
-      to:
+      MailApp.sendEmail({
+
+        to:
+          STORE_INFO.ADMIN_EMAIL,
+
+        subject: subject,
+
+        htmlBody: htmlBody
+
+      });
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for admin notification: " + mailAppErr.toString()
+      );
+
+      GmailApp.sendEmail(
+
         STORE_INFO.ADMIN_EMAIL,
 
-      subject: subject,
+        subject,
 
-      htmlBody: htmlBody
+        "",
 
-    });
+        {
+          htmlBody: htmlBody
+        }
+
+      );
+
+    }
 
     return true;
 
   } catch (err) {
 
     Logger.log(
-      err.toString()
+      "notifyAdminNewOrder error: " + err.toString()
     );
 
     return false;
@@ -239,22 +336,46 @@ function sendOrderStatusEmail(
       orderId +
       "</p>";
 
-    MailApp.sendEmail({
+    try {
 
-      to: email,
+      MailApp.sendEmail({
 
-      subject: subject,
+        to: email,
 
-      htmlBody: htmlBody
+        subject: subject,
 
-    });
+        htmlBody: htmlBody
+
+      });
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for status email to " + email + ": " + mailAppErr.toString()
+      );
+
+      GmailApp.sendEmail(
+
+        email,
+
+        subject,
+
+        "",
+
+        {
+          htmlBody: htmlBody
+        }
+
+      );
+
+    }
 
     return true;
 
   } catch (err) {
 
     Logger.log(
-      err.toString()
+      "sendOrderStatusEmail error: " + err.toString()
     );
 
     return false;
@@ -295,23 +416,47 @@ function sendContactNotification(
       message +
       "</p>";
 
-    MailApp.sendEmail({
+    try {
 
-      to:
+      MailApp.sendEmail({
+
+        to:
+          STORE_INFO.ADMIN_EMAIL,
+
+        subject: subject,
+
+        htmlBody: htmlBody
+
+      });
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for contact notification: " + mailAppErr.toString()
+      );
+
+      GmailApp.sendEmail(
+
         STORE_INFO.ADMIN_EMAIL,
 
-      subject: subject,
+        subject,
 
-      htmlBody: htmlBody
+        "",
 
-    });
+        {
+          htmlBody: htmlBody
+        }
+
+      );
+
+    }
 
     return true;
 
   } catch (err) {
 
     Logger.log(
-      err.toString()
+      "sendContactNotification error: " + err.toString()
     );
 
     return false;
@@ -352,22 +497,46 @@ function sendWelcomeEmail(
 
       "</a>";
 
-    MailApp.sendEmail({
+    try {
 
-      to: email,
+      MailApp.sendEmail({
 
-      subject: subject,
+        to: email,
 
-      htmlBody: htmlBody
+        subject: subject,
 
-    });
+        htmlBody: htmlBody
+
+      });
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for welcome email to " + email + ": " + mailAppErr.toString()
+      );
+
+      GmailApp.sendEmail(
+
+        email,
+
+        subject,
+
+        "",
+
+        {
+          htmlBody: htmlBody
+        }
+
+      );
+
+    }
 
     return true;
 
   } catch (err) {
 
     Logger.log(
-      err.toString()
+      "sendWelcomeEmail error: " + err.toString()
     );
 
     return false;
@@ -381,20 +550,65 @@ function sendWelcomeEmail(
  *************************************************/
 function testEmail() {
 
-  MailApp.sendEmail({
+  try {
 
-    to:
-      Session
-      .getActiveUser()
-      .getEmail(),
+    const recipient =
+      STORE_INFO.ADMIN_EMAIL;
 
-    subject:
-      "Fly On Earth Email Test",
+    MailApp.sendEmail({
 
-    htmlBody:
-      "<h2>Email System Working</h2>"
+      to: recipient,
 
-  });
+      subject:
+        "Fly On Earth Email Test",
+
+      htmlBody:
+        "<h2>Email System Working</h2>"
+
+    });
+
+    return {
+      success: true,
+      message: "Test email sent to " + recipient
+    };
+
+  } catch (err) {
+
+    // Fallback to GmailApp
+    try {
+
+      const recipient =
+        STORE_INFO.ADMIN_EMAIL;
+
+      GmailApp.sendEmail(
+
+        recipient,
+
+        "Fly On Earth Email Test (GmailApp)",
+
+        "",
+
+        {
+          htmlBody: "<h2>Email System Working (GmailApp Fallback)</h2>"
+        }
+
+      );
+
+      return {
+        success: true,
+        message: "Test email sent via GmailApp fallback to " + recipient
+      };
+
+    } catch (gmailErr) {
+
+      return {
+        success: false,
+        message: "MailApp: " + err.toString() + " | GmailApp: " + gmailErr.toString()
+      };
+
+    }
+
+  }
 
 }
 
@@ -409,15 +623,39 @@ function sendEmail(
 
   try {
 
-    MailApp.sendEmail({
+    try {
 
-      to: to,
+      MailApp.sendEmail({
 
-      subject: subject,
+        to: to,
 
-      htmlBody: htmlBody
+        subject: subject,
 
-    });
+        htmlBody: htmlBody
+
+      });
+
+    } catch (mailAppErr) {
+
+      Logger.log(
+        "MailApp failed for generic email to " + to + ": " + mailAppErr.toString()
+      );
+
+      GmailApp.sendEmail(
+
+        to,
+
+        subject,
+
+        "",
+
+        {
+          htmlBody: htmlBody
+        }
+
+      );
+
+    }
 
     return {
 

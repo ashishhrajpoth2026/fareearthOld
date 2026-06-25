@@ -235,7 +235,11 @@ async function sendOTP() {
         const result = await response.json();
         
         if (result.success || response.ok) {
-            renderSystemNotice(result.message || "OTP sent successfully.", "success");
+            if (result.warning) {
+                renderSystemNotice(result.message || "OTP generated but email delivery may be delayed.", "warning");
+            } else {
+                renderSystemNotice(result.message || "OTP sent successfully.", "success");
+            }
             document.getElementById("otp-verification-zone").classList.remove("hidden");
         } else {
             renderSystemNotice(result.message || "Failed to send OTP.", "warning");
