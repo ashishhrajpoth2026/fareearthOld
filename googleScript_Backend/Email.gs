@@ -8,10 +8,10 @@ const STORE_INFO = {
   NAME: "Fly On Earth",
 
   SUPPORT_EMAIL:
-    "projectweebstudio@gmail.com",
+    "p1432k@gmail.com",
 
   ADMIN_EMAIL:
-    "projectweebstudio@gmail.com",
+    "p1432k@gmail.com",
 
   WEBSITE:
     "https://ashishhrajpoth2026.github.io/fareearth"

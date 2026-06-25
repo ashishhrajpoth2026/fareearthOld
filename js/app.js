@@ -4,12 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function getBasePath() {
     const path = window.location.pathname;
-    // For GitHub Pages subpath like /fareearth/, extract the base
     const parts = path.split('/').filter(Boolean);
-    // If we're at a subpath, return the base (e.g., /fareearth/)
-    if (parts.length > 0) {
+
+    // Detect GitHub Pages subpath like /fareearth/
+    // If first path segment is not an HTML file, it's likely a subpath
+    if (parts.length > 0 && !parts[0].includes('.html') && !parts[0].includes('.')) {
         return '/' + parts[0] + '/';
     }
+
+    // Running locally (file:// or no subpath)
     return '/';
 }
 
