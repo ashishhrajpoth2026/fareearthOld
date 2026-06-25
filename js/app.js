@@ -2,17 +2,30 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeGlobalLayoutComponents();
 });
 
+function getBasePath() {
+    const path = window.location.pathname;
+    // For GitHub Pages subpath like /fareearth/, extract the base
+    const parts = path.split('/').filter(Boolean);
+    // If we're at a subpath, return the base (e.g., /fareearth/)
+    if (parts.length > 0) {
+        return '/' + parts[0] + '/';
+    }
+    return '/';
+}
+
 async function initializeGlobalLayoutComponents() {
     const headerPortal = document.getElementById("header-portal");
     const footerPortal = document.getElementById("footer-portal");
 
+    const basePath = getBasePath();
+
     if (headerPortal) {
-        await fetchComponentElement("/assets/components/header.html", headerPortal);
+        await fetchComponentElement(basePath + "assets/components/header.html", headerPortal);
         bindHeaderEventModules();
         highlightActiveNavItem();
     }
     if (footerPortal) {
-        await fetchComponentElement("/assets/components/footer.html", footerPortal);
+        await fetchComponentElement(basePath + "assets/components/footer.html", footerPortal);
     }
     
     updateCartCount();
@@ -286,7 +299,7 @@ function buyNow(id, name, price, image) {
 
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
-    window.location.href = "/checkout.html";
+    window.location.href = getBasePath() + "checkout.html";
 }
 
 function showToast(message) {

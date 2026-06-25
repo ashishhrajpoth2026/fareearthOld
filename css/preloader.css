@@ -141,42 +141,6 @@
     text-transform: uppercase;
 }
 
-/* ─── Fancy Tags ─── */
-.preloader-fancy {
-    margin-top: 10px;
-    opacity: 0;
-    transition: opacity 0.4s ease 0.2s;
-}
-
-.preloader-fancy.visible {
-    opacity: 1;
-}
-
-.preloader-fancy-tag {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    color: rgba(255, 215, 0, 0.65);
-    display: inline-block;
-    padding: 3px 14px;
-    border: 1px solid rgba(255, 215, 0, 0.12);
-    border-radius: 16px;
-    background: rgba(255, 215, 0, 0.03);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
-
-.preloader-fancy-hint {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 9px;
-    font-weight: 300;
-    letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.25);
-    margin-top: 5px;
-    text-transform: uppercase;
-}
-
 /* ─── Progress bar ─── */
 .preloader-bar {
     width: 120px;
@@ -216,9 +180,5 @@
     .preloader-logo img {
         width: 44px;
         height: 44px;
-    }
-    .preloader-fancy-tag {
-        font-size: 10px;
-        padding: 2px 10px;
     }
 }

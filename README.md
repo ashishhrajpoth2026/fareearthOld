@@ -90,7 +90,7 @@ A modern, static e-commerce website for gaming chairs and premium products, buil
    - Select branch: `main`, folder: `/ (root)`
    - Click **Save**
 
-Your site will be live at `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`
+Your site will be live at `https://ashishhrajpoth2026.github.io/fareearth/`
 
 ### Custom Domain (Optional)
 

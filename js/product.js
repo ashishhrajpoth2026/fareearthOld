@@ -30,7 +30,7 @@ async function loadProduct() {
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b9935a" stroke-width="1.5" style="margin-bottom:16px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 <h2 style="font-size:1.5rem;margin:0 0 8px;">Product Not Found</h2>
                 <p style="color:#64748b;margin:0 0 24px;">No product ID was provided.</p>
-                <a href="/shop.html" class="btn btn-primary">Browse Shop</a>
+                <a href="shop.html" class="btn btn-primary">Browse Shop</a>
             </div>`;
         return;
     }
@@ -53,7 +53,7 @@ async function loadProduct() {
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" style="margin-bottom:16px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                 <h2 style="font-size:1.5rem;margin:0 0 8px;">Unable to Load Product</h2>
                 <p style="color:#64748b;margin:0 0 24px;">Something went wrong. Please try again.</p>
-                <a href="/shop.html" class="btn btn-primary">Back to Shop</a>
+                <a href="shop.html" class="btn btn-primary">Back to Shop</a>
             </div>`;
     }
 }
@@ -91,7 +91,7 @@ function renderProduct(product) {
                         onclick="buyNow('${product.productId}', '${safeName}', ${product.price}, '${product.image}')">
                         Buy Now
                     </button>
-                <a href="/shop.html" class="btn btn-outline" style="color:#52525b;border-color:#e4e4e7;background:transparent;">
+                <a href="shop.html" class="btn btn-outline" style="color:#52525b;border-color:#e4e4e7;background:transparent;">
                         Continue Shopping
                     </a>
                 </div>

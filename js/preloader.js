@@ -11,15 +11,11 @@
         '<div id="preloader-overlay">' +
             '<div class="preloader-glass-container" id="preloader-glass">' +
                 '<div class="preloader-logo" id="preloader-logo">' +
-                    '<img src="images/logop.png" alt="Fly On Earth" style="width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 2px 16px rgba(255,215,0,0.15)">' +
+                    '<img src="images/logop.png" alt="Fare Earth" style="width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 2px 16px rgba(255,215,0,0.15)">' +
                 '</div>' +
                 '<div class="preloader-tagline" id="preloader-tagline">' +
-                    '<div class="preloader-tagline-main">Making Every Gift Special</div>' +
-                    '<div class="preloader-tagline-sub">Fly On Earth — Premium Gift Store</div>' +
-                '</div>' +
-                '<div class="preloader-fancy" id="preloader-fancy">' +
-                    '<span class="preloader-fancy-tag">Trending Gifts</span>' +
-                    '<div class="preloader-fancy-hint">✦ Handpicked with love ✦</div>' +
+                    '<div class="preloader-tagline-main">Dominate Every Game</div>' +
+                    '<div class="preloader-tagline-sub">Fare Earth — Premium Gaming Chair</div>' +
                 '</div>' +
                 '<div class="preloader-bar" id="preloader-bar">' +
                     '<div class="preloader-bar-fill" id="preloader-bar-fill"></div>' +
@@ -31,6 +27,29 @@
     let productsData = null;
     let productsFetched = false;
     let renderStarted = false;
+    let preloaderDone = false;
+    let timeoutExpired = false;
+
+    function hidePreloader() {
+        if (preloaderDone) return;
+        preloaderDone = true;
+        var overlay = document.getElementById('preloader-overlay');
+        if (overlay) overlay.classList.add('hidden');
+        setTimeout(function () {
+            var el = document.getElementById('preloader-overlay');
+            if (el && el.parentNode) el.parentNode.removeChild(el);
+        }, 1000);
+        localStorage.setItem(KEY, 'true');
+    }
+
+    function checkAndHide() {
+        if (productsFetched && renderStarted && !preloaderDone) {
+            // Small delay so the bar fill animation completes
+            setTimeout(hidePreloader, 400);
+        } else if (timeoutExpired && !preloaderDone) {
+            hidePreloader();
+        }
+    }
 
     async function fetchProducts() {
         try {
@@ -46,22 +65,22 @@
         } catch (e) {
             console.warn('Preloader fetch error:', e);
             productsData = [
-                { productId: "P001", productName: "Luxury Watch Collection", category: "Accessories", price: 349, rating: 4.5, reviews: 120, image: "https://i.ibb.co/m1fzy1y/watch.jpg", description: "Timeless elegance meets modern design.", trending: "", status: "Active" },
-                { productId: "P002", productName: "Organic Spa Gift Box", category: "WELLNESS", price: 99, rating: 4.3, reviews: 222, image: "https://i.ibb.co/nMpmGK8R/beauty.jpg", description: "Timeless elegance meets modern design.", trending: "", status: "Active" },
-                { productId: "P003", productName: "Gift Box", category: "WELLNESS", price: 199, rating: 5, reviews: 25, image: "https://i.ibb.co/Y4FTLk0h/giftb4.jpg", description: "Timeless elegance meets modern design.", trending: "", status: "Active" },
-                { productId: "P004", productName: "New Demo", category: "WELLNESS", price: 199, rating: 5, reviews: 25, image: "https://i.ibb.co/C5x4J6pQ/tingo2t.jpg", description: "Timeless elegance meets modern design.", trending: "", status: "Active" }
+                { productId: "P001", productName: "ErgoStealth Pro Gaming Chair", category: "GAMING CHAIR", price: 499, rating: 4.8, reviews: 320, image: "https://i.ibb.co/m1fzy1y/watch.jpg", description: "Premium ergonomic gaming chair with lumbar support.", trending: "Yes", status: "Active" },
+                { productId: "P002", productName: "Titan Elite Racing Seat", category: "GAMING CHAIR", price: 599, rating: 4.7, reviews: 215, image: "https://i.ibb.co/nMpmGK8R/beauty.jpg", description: "Race-inspired design meets all-day comfort.", trending: "Yes", status: "Active" },
+                { productId: "P003", productName: "Nebula Cloud Chair", category: "GAMING CHAIR", price: 449, rating: 4.9, reviews: 180, image: "https://i.ibb.co/Y4FTLk0h/giftb4.jpg", description: "Cloud-soft cushioning for marathon sessions.", trending: "", status: "Active" },
+                { productId: "P004", productName: "Apex Series Gaming Throne", category: "GAMING CHAIR", price: 699, rating: 5, reviews: 95, image: "https://i.ibb.co/C5x4J6pQ/tingo2t.jpg", description: "The ultimate throne for competitive gamers.", trending: "Yes", status: "Active" }
             ];
         }
         productsFetched = true;
+        checkAndHide();
         tryRenderProducts();
     }
 
     function tryRenderProducts() {
         if (!productsData || renderStarted || !document.getElementById('featured-products')) return;
         renderStarted = true;
-        sessionStorage.setItem('fye_pd', '1');
-        localStorage.setItem(KEY, 'true');
         renderProductsProgressive();
+        checkAndHide();
     }
 
     function renderProductsProgressive() {
@@ -109,28 +128,23 @@ return '<div class="product-card"><a href="product.html?id=' + p.productId + '" 
     waitForBody(function () {
         var logo = document.getElementById('preloader-logo');
         var tagline = document.getElementById('preloader-tagline');
-        var fancy = document.getElementById('preloader-fancy');
         var bar = document.getElementById('preloader-bar');
         var fill = document.getElementById('preloader-bar-fill');
-        var overlay = document.getElementById('preloader-overlay');
 
         fetchProducts();
 
         setTimeout(function () { if (logo) logo.classList.add('visible'); }, 200);
         setTimeout(function () { if (tagline) tagline.classList.add('visible'); }, 500);
-        setTimeout(function () { if (fancy) fancy.classList.add('visible'); }, 800);
         setTimeout(function () {
             if (bar) bar.classList.add('active');
             if (fill) fill.style.width = '100%';
         }, 300);
 
+        // Max 3 seconds fallback — hide preloader if products still haven't loaded
         setTimeout(function () {
-            if (overlay) overlay.classList.add('hidden');
-        }, 1200);
-
-        setTimeout(function () {
-            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        }, 2200);
+            timeoutExpired = true;
+            checkAndHide();
+        }, 3000);
     });
 
 })();
