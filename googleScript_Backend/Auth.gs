@@ -215,8 +215,7 @@ function sendOTP(email) {
     if (!emailSent) {
 
       Logger.log(
-        "WARNING: OTP saved to sheet but sendOTPEmail returned false for " +
-        email
+        "WARNING: OTP saved to sheet but sendOTPEmail returned false for " + email
       );
 
       // Return success anyway since OTP is in the sheet
@@ -226,8 +225,7 @@ function sendOTP(email) {
 
         warning: true,
 
-        message:
-          "OTP generated. Email delivery may be delayed. If you don't receive it, please contact support."
+        message: "OTP generated. Please check your email inbox (including spam folder). If not received, contact support."
 
       };
 

@@ -291,6 +291,20 @@ case "getRecentOrders":
           exportOrdersCSV(request)
         );
 
+      /*************************************
+       * EMAIL DIAGNOSTICS
+       *************************************/
+
+      case "testEmail":
+        return jsonResponse(
+          testEmail()
+        );
+
+      case "checkEmailQuota":
+        return jsonResponse(
+          checkMailQuota()
+        );
+
       default:
 
         return jsonResponse({

@@ -8,13 +8,19 @@ const STORE_INFO = {
   NAME: "Fly On Earth",
 
   SUPPORT_EMAIL:
-    "p1432k@gmail.com",
+    "projectweebstudio@gmail.com",
 
   ADMIN_EMAIL:
-    "p1432k@gmail.com",
+    "projectweebstudio@gmail.com",
 
   WEBSITE:
-    "https://ashishhrajpoth2026.github.io/fareearth"
+    "https://ashishhrajpoth2026.github.io/fareearth",
+
+  FROM_NAME:
+    "Fly On Earth Store",
+
+  REPLY_TO:
+    "projectweebstudio@gmail.com"
 
 };
 
@@ -29,81 +35,74 @@ function sendOTPEmail(
   try {
 
     const subject =
-      STORE_INFO.NAME +
+      STORE_INFO.FROM_NAME +
       " - Login OTP";
 
     const htmlBody =
+      buildOTPEmailHTML(otp);
 
-      "<div style='font-family:Arial'>" +
+    const textBody =
+      "Your One Time Password (OTP) is: " + otp + "\n\n" +
+      "This OTP will expire in 5 minutes.\n\n" +
+      "If you did not request this OTP, please ignore this email.\n\n" +
+      STORE_INFO.NAME + "\n" +
+      STORE_INFO.WEBSITE;
 
-      "<h2>" +
-      STORE_INFO.NAME +
-      "</h2>" +
+    // Validate email before attempting send
+    if (!email || !email.includes('@')) {
+      Logger.log("sendOTPEmail called with invalid email: " + email);
+      return false;
+    }
 
-      "<p>Your One Time Password is:</p>" +
+    // Log the attempt
+    Logger.log("Attempting to send OTP email to: " + email);
 
-      "<h1>" +
-      otp +
-      "</h1>" +
-
-      "<p>This OTP will expire in 5 minutes.</p>" +
-
-      "<p>If you did not request this OTP, ignore this email.</p>" +
-
-      "</div>";
-
-    // Try MailApp first (standard service)
+    // Try GmailApp first (uses Gmail's sending capabilities which often have better deliverability)
     try {
 
-      MailApp.sendEmail({
-
-        to: email,
-
-        subject: subject,
-
-        htmlBody: htmlBody
-
-      });
+      GmailApp.sendEmail(
+        email,
+        subject,
+        textBody,
+        {
+          htmlBody: htmlBody,
+          name: STORE_INFO.FROM_NAME,
+          replyTo: STORE_INFO.REPLY_TO
+        }
+      );
 
       Logger.log(
-        "MailApp.sendEmail succeeded for OTP to " + email
+        "GmailApp.sendEmail succeeded for OTP to " + email
       );
 
       return true;
 
-    } catch (mailAppErr) {
+    } catch (gmailAppErr) {
 
       Logger.log(
-        "MailApp failed for OTP to " + email + ": " + mailAppErr.toString()
+        "GmailApp failed for OTP to " + email + ": " + gmailAppErr.toString()
       );
 
-      // Fallback to GmailApp
+      // Fallback to MailApp
       try {
 
-        GmailApp.sendEmail(
-
-          email,
-
-          subject,
-
-          "", // plain text body (empty since we use htmlBody)
-
-          {
-            htmlBody: htmlBody
-          }
-
-        );
+        MailApp.sendEmail({
+          to: email,
+          subject: subject,
+          htmlBody: htmlBody,
+          replyTo: STORE_INFO.REPLY_TO
+        });
 
         Logger.log(
-          "GmailApp.sendEmail fallback succeeded for OTP to " + email
+          "MailApp.sendEmail fallback succeeded for OTP to " + email
         );
 
         return true;
 
-      } catch (gmailAppErr) {
+      } catch (mailAppErr) {
 
         Logger.log(
-          "GmailApp fallback also failed for OTP to " + email + ": " + gmailAppErr.toString()
+          "MailApp fallback also failed for OTP to " + email + ": " + mailAppErr.toString()
         );
 
         return false;
@@ -119,6 +118,79 @@ function sendOTPEmail(
     );
 
     return false;
+
+  }
+
+}
+
+/*************************************************
+ * BUILD OTP EMAIL HTML
+ *************************************************/
+function buildOTPEmailHTML(otp) {
+
+  const style = [
+    "body{font-family:'Segoe UI',Arial,sans-serif;margin:0;padding:0;background-color:#f4f4f4}",
+    ".container{max-width:520px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08)}",
+    ".header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:32px 24px;text-align:center}",
+    ".header h1{color:#ffffff;margin:0;font-size:22px;font-weight:700}",
+    ".body{padding:32px 24px;color:#333333;font-size:15px;line-height:1.6}",
+    ".otp-box{background:#f8f9fa;border:2px dashed #b9935a;border-radius:10px;padding:20px;text-align:center;margin:20px 0}",
+    ".otp-code{font-size:36px;font-weight:800;letter-spacing:6px;color:#1a1a2e;font-family:'Courier New',monospace}",
+    ".expiry{color:#888888;font-size:13px;text-align:center;margin-top:16px}",
+    ".footer{background:#f8f9fa;padding:20px 24px;text-align:center;color:#888888;font-size:12px;border-top:1px solid #eeeeee}",
+    ".footer a{color:#b9935a;text-decoration:none}"
+  ].join("");
+
+  return (
+    "<!DOCTYPE html>" +
+    "<html><head><meta charset='UTF-8'>" +
+    "<style>" + style + "</style>" +
+    "</head><body>" +
+    "<div class='container'>" +
+      "<div class='header'>" +
+        "<h1>" + STORE_INFO.NAME + "</h1>" +
+      "</div>" +
+      "<div class='body'>" +
+        "<p style='margin-top:0'>Hello,</p>" +
+        "<p>You requested a one-time password to access your admin account.</p>" +
+        "<div class='otp-box'>" +
+          "<p style='margin:0 0 8px 0;color:#666;font-size:13px'>Your One-Time Password</p>" +
+          "<div class='otp-code'>" + otp + "</div>" +
+        "</div>" +
+        "<p class='expiry'>⏱ This OTP will expire in <strong>5 minutes</strong></p>" +
+        "<p style='margin-top:20px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:13px'>" +
+          "If you did not request this code, no action is needed. Please ignore this email." +
+        "</p>" +
+      "</div>" +
+      "<div class='footer'>" +
+        "<p style='margin:0'>&copy; " + new Date().getFullYear() + " " + STORE_INFO.NAME + "</p>" +
+        "<p style='margin:4px 0 0 0'>" +
+          "<a href='" + STORE_INFO.WEBSITE + "'>" + STORE_INFO.WEBSITE + "</a>" +
+        "</p>" +
+      "</div>" +
+    "</div>" +
+    "</body></html>"
+  );
+
+}
+
+/*************************************************
+ * CHECK EMAIL QUOTA
+ *************************************************/
+function checkMailQuota() {
+
+  try {
+
+    return {
+      mailAppRemaining: MailApp.getRemainingDailyQuota(),
+      gmailAppRemaining: "Use Logger to check (GmailApp has no getRemainingDailyQuota)"
+    };
+
+  } catch (err) {
+
+    return {
+      error: err.toString()
+    };
 
   }
 
