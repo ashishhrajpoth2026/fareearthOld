@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", loadCart);
 function loadCart() {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const items = document.getElementById("cart-items");
-    const checkoutButton = document.querySelector('a.btn[href="checkout.html"]');
+    const checkoutButton = document.querySelector('a.btn[href="checkout"]');
     let subtotal = 0;
     items.innerHTML = "";
 
@@ -17,7 +17,7 @@ function loadCart() {
                 </svg>
                 <h3 style="font-size: 1.25rem; margin: 0 0 8px 0;">Your cart is empty</h3>
                 <p style="color: var(--muted); margin: 0 0 24px 0;">Start browsing our premium collections to add items to your cart.</p>
-                <a href="shop.html" class="btn btn-primary">Start Shopping</a>
+                <a href="shop" class="btn btn-primary">Start Shopping</a>
             </div>
         `;
         if (checkoutButton) {

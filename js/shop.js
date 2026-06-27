@@ -155,7 +155,7 @@ function renderProducts(products) {
         const safeName = product.productName.replace(/'/g, "\\'");
         container.innerHTML += `
         <div class="product-card">
-            <a href="product.html?id=${product.productId}" class="image-wrapper" aria-label="View details of ${product.productName}">
+            <a href="product?id=${product.productId}" class="image-wrapper" aria-label="View details of ${product.productName}">
                 <img
                     src="${product.image}"
                     alt="${product.productName}"
@@ -164,7 +164,7 @@ function renderProducts(products) {
             </a>
             <div class="product-card-info">
                 <span class="category">${product.category}</span>
-                <a href="product.html?id=${product.productId}" style="text-decoration:none;">
+                <a href="product?id=${product.productId}" style="text-decoration:none;">
                     <h3>${product.productName}</h3>
                 </a>
                 <div class="meta-row">

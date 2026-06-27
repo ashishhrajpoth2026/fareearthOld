@@ -39,7 +39,7 @@ if (!cart || cart.length === 0) {
 container.innerHTML = `
 <div class="checkout-empty">
 <p>Your cart is empty.</p>
-<a href="shop.html" class="btn btn-primary">Browse Products</a>
+                <a href="shop" class="btn btn-primary">Browse Products</a>
 </div>
 `;
 return;
@@ -298,7 +298,7 @@ localStorage.removeItem(
 
 window.location.href =
 
-"success.html?orderId=" +
+            "success?orderId=" +
 
 result.orderId;
 

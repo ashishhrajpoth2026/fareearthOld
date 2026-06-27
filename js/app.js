@@ -302,7 +302,7 @@ function buyNow(id, name, price, image) {
 
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
-    window.location.href = getBasePath() + "checkout.html";
+    window.location.href = getBasePath() + "checkout";
 }
 
 function showToast(message) {
