@@ -23,6 +23,9 @@ yarn-error.log*
 # Logs
 *.log
 
+# Google Apps Script backend (not deployed via GitHub - deploy directly from editor)
+googleScript_Backend/
+
 # Excel/DB files (not needed in production)
 *.xlsx
 *.xls
