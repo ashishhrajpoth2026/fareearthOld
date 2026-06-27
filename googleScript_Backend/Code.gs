@@ -4,7 +4,7 @@
  * US STORE - MAIN API ROUTER
  * FILE: Code.gs
  *************************************************/
-const SHEET_ID = "1ILHBpJpeXC2CTK5Jm1lYAaQbsbN-AEOgBdIbl8TwA-I";
+const SHEET_ID = "1ILHBpJpeXC2CTK5Jm1lYAaQbsbN-AEOgBdIbl8TwA-I"; 
 
 /*************************************************
  * GET REQUEST
@@ -289,6 +289,20 @@ case "getRecentOrders":
       case "exportOrdersCSV":
         return jsonResponse(
           exportOrdersCSV(request)
+        );
+
+      /*************************************
+       * SYSTEM / MIGRATION
+       *************************************/
+
+      case "migrateOTPSheet":
+        return jsonResponse(
+          migrateOTPSheet()
+        );
+
+      case "cleanExpiredOTPs":
+        return jsonResponse(
+          cleanExpiredOTPs()
         );
 
       /*************************************
