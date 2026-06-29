@@ -15,8 +15,8 @@ const CONFIG = {
     // API & Backend
     // =========================================================================
     
-    /** Google Apps Script Web App URL (deployed production endpoint) */
-    API_URL: "https://script.google.com/macros/s/AKfycbzHHvPQkGYbwj1BFZtZ95GOxCJQGJ_IC-s-TpeF4EyNqJCO4Yvscm53v5mfwz2Yzh0r/exec",
+    /** Direct Apps Script web app URL for GitHub Pages + Apps Script only setup */
+    API_URL: "https://script.google.com/macros/s/AKfycbyDxF7dgIJPkIL2rxkcI7hYTTaWAUS3CiNwlfzQ6d4xGnIV7YQ5iiki62hpvj_GPzvN/exec",
     
     /** Local products JSON file (fallback/static data source) */
     PRODUCTS_JSON_URL: "products.json",
