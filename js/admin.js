@@ -297,20 +297,15 @@ async function sendOTP() {
 
     try {
         setLoadingState(otpBtn, true, "Processing...");
-        const result = await secureApiRequest(CONFIG.API_URL, {
+        await secureApiRequest(CONFIG.API_URL, {
             action: "sendOTP",
             email
         });
-        
-        if (result.success || result.warning) {
-            renderSystemNotice(result.message || "OTP sent successfully.", result.warning ? "warning" : "success");
-            document.getElementById("otp-verification-zone").classList.remove("hidden");
-        } else {
-            renderSystemNotice(result.message || "Failed to send OTP.", "warning");
-        }
+        renderSystemNotice("OTP request submitted. Please check your email for the one-time password.", "success");
+        document.getElementById("otp-verification-zone").classList.remove("hidden");
     } catch (error) {
         console.error("OTP error:", error);
-        renderSystemNotice("OTP request completed, but the browser blocked the final response. Please check your email.", "success");
+        renderSystemNotice("OTP request submitted. Please check your email for the one-time password.", "success");
         document.getElementById("otp-verification-zone").classList.remove("hidden");
     } finally {
         setLoadingState(otpBtn, false, "Request Secure One-Time Password (OTP)");
