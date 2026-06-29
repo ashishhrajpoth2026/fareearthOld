@@ -17,7 +17,7 @@
 // =============================================================================
 
 /** Google Apps Script Web App URL */
-define('GAS_URL', 'https://script.google.com/macros/s/AKfycbytAWrPskFRNKWu_ztj8IhiTSUorDeEMoXl49HxQHq4BxsAH2baAbsiU3xEt7kF6m8/exec');
+define('GAS_URL', 'https://script.google.com/macros/s/AKfycbwOSmHvFdSa6DQQb31uuowEG-f6ERA1fUgSReb9oE3TYIBfx9k_EVD3zhP6KEUsAmA/exec');
 
 /** Request timeout in seconds */
 define('TIMEOUT_SEC', 30);
