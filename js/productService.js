@@ -69,10 +69,10 @@ async function _loadProductsFromJSON() {
 
 function _getFallbackProducts() {
     return [
-        { productId: "P001", productName: "Racing Gaming Chair", category: "", price: 249.99, rating: 4.5, reviews: 120, image: "https://i.ibb.co/0jbdbpK8/racing.jpg", description: "Ergonomic racing-style gaming chair with adjustable armrests and lumbar support.", trending: "", status: "Active" },
-        { productId: "P002", productName: "Gaming Chair", category: "", price: 299.99, rating: 4.3, reviews: 222, image: "https://i.ibb.co/R4z651Ht/cahirrr.jpg", description: "SHARP Leatherette Gaming Chair – Blue", trending: "", status: "Active" },
-        { productId: "P003", productName: "Bossin Gaming Chair with Footrest and Massage", category: "", price: 219.99, rating: 5, reviews: 28, image: "https://i.ibb.co/jvzRhp2n/Bossin.jpg", description: "A comfortable gaming chair with footrest and massage feature, available in multiple colors.", trending: "", status: "Active" },
-        { productId: "P004", productName: "Premium Gaming Chair", category: "", price: 199.99, rating: 5, reviews: 25, image: "https://i.ibb.co/tpqfSKDY/cahitp.jpg", description: "Bestseller Chair in the USA. International Quality checks. Sold in 15 countries worldwide.", trending: "yes", status: "Active" }
+        { productId: "P001", productName: "Racing Gaming Chair", category: "Gaming Chairs", price: 249.99, rating: 4.5, reviews: 120, image: "https://i.ibb.co/0jbdbpK8/racing.jpg", description: "Ergonomic racing-style gaming chair with adjustable armrests and lumbar support.", trending: "yes", status: "Active" },
+        { productId: "P002", productName: "Gaming Chair - Blue Edition", category: "Gaming Chairs", price: 299.99, rating: 4.3, reviews: 222, image: "https://i.ibb.co/R4z651Ht/cahirrr.jpg", description: "SHARP Leatherette Gaming Chair – Blue.", trending: "yes", status: "Active" },
+        { productId: "P003", productName: "Bossin Gaming Chair with Footrest and Massage", category: "Gaming Chairs", price: 219.99, rating: 5.0, reviews: 28, image: "https://i.ibb.co/jvzRhp2n/Bossin.jpg", description: "A comfortable gaming chair with footrest and massage feature.", trending: "", status: "Active" },
+        { productId: "P004", productName: "Premium Gaming Chair - Black", category: "Gaming Chairs", price: 199.99, rating: 5.0, reviews: 25, image: "https://i.ibb.co/tpqfSKDY/cahitp.jpg", description: "Bestseller Chair in the USA. Ergonomic design.", trending: "yes", status: "Active" }
     ];
 }
 
