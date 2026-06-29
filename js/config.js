@@ -16,7 +16,7 @@ const CONFIG = {
     // =========================================================================
     
     /** Direct Apps Script web app URL for GitHub Pages + Apps Script only setup */
-    API_URL: "https://script.google.com/macros/s/AKfycbx_A3BGqto0ZWzP33dY21-IoZ76X3lBDTHG-OlzGORI1w6r0_gL1OUeP3G2XqzevwU3/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbxckTDUlkj4H2ujahTz5xw8Yi_TBjIkv5OfyZ6qnFNqDwo2T31gH6eT5YLsJK_F_XwS/exec",
     
     /** Local products JSON file (fallback/static data source) */
     PRODUCTS_JSON_URL: "products.json",
