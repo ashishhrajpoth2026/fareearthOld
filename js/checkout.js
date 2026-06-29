@@ -177,12 +177,9 @@ function removeItem(index) {
  * @returns {Promise<Object>} The parsed JSON response
  */
 async function secureApiRequest(url, data, method = 'POST') {
-    // Create an AbortController for timeout handling
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
 
-    // Include auth credentials in the body to avoid CORS preflight
-    // (text/plain is a simple content type that doesn't trigger preflight)
     const bodyData = method === 'POST' ? { ...data, apiKey: CONFIG.API_KEY, timestamp: Date.now() } : undefined;
 
     try {
@@ -197,9 +194,11 @@ async function secureApiRequest(url, data, method = 'POST') {
 
         clearTimeout(timeoutId);
 
-        // Handle non-JSON responses (e.g., network errors, HTML error pages)
         const contentType = response.headers.get('content-type') || '';
         if (!contentType.includes('application/json')) {
+            if (data && data.action === 'placeOrder') {
+                return { success: false, message: 'The order request was blocked by the server response. Please retry after the Apps Script deployment is updated.' };
+            }
             throw new Error('Invalid response format from server');
         }
 
@@ -217,7 +216,6 @@ async function secureApiRequest(url, data, method = 'POST') {
             throw new Error('Request timed out. Please try again.');
         }
 
-        // Re-throw with a user-friendly message
         if (error.message === 'Failed to fetch') {
             throw new Error('Network error. Please check your connection and try again.');
         }
