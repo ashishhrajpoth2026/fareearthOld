@@ -61,7 +61,7 @@ function renderProducts(products) {
         return `
         <div class="product-card">
             <a href="product?id=${product.productId}" class="image-wrapper" aria-label="View details of ${product.productName}">
-                <img src="${product.image}" alt="${product.productName}" class="product-image" loading="lazy">
+                <img src="${product.image}" alt="${product.productName}" class="product-image" loading="lazy" onerror="handleImageError(this)">
             </a>
             <div class="product-card-info">
                 <span class="category">${product.category}</span>

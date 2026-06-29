@@ -68,7 +68,8 @@ function renderProduct(product) {
                 <img
                     src="${product.image}"
                     alt="${product.productName}"
-                    class="product-detail-image">
+                    class="product-detail-image"
+                    onerror="handleImageError(this)">
             </div>
             <div class="product-info-section">
                 <span class="product-detail-category">${product.category || ""}</span>
@@ -99,7 +100,7 @@ function renderProduct(product) {
         </div>
     `;
 
-    document.title = `${product.productName} | Fly On Earth`;
+    document.title = `${product.productName} | Fareearth`;
 
     if (typeof syncCartButtons === "function") {
         syncCartButtons();
@@ -144,7 +145,8 @@ function renderRelatedProducts(products) {
                     src="${product.image}"
                     alt="${product.productName}"
                     class="product-image"
-                    loading="lazy">
+                    loading="lazy"
+                    onerror="handleImageError(this)">
             </a>
             <div class="product-card-info">
                 <span class="category">${product.category}</span>

@@ -60,6 +60,7 @@ async function initializeGlobalLayoutComponents() {
     }
     
     updateCartCount();
+    showVerificationBanner();
 }
 
 async function fetchComponentElement(url, targetElement) {
@@ -70,6 +71,22 @@ async function fetchComponentElement(url, targetElement) {
         targetElement.innerHTML = htmlContent;
     } catch (error) {
         console.error("Component load error:", error);
+    }
+}
+
+function showVerificationBanner() {
+    const banner = document.getElementById("verification-banner");
+    if (banner) {
+        // Show the banner briefly on page load, then fade out
+        banner.style.display = "block";
+        setTimeout(() => {
+            banner.style.transition = "opacity 0.5s ease";
+            banner.style.opacity = "0";
+            setTimeout(() => {
+                banner.style.display = "none";
+                banner.style.opacity = "1";
+            }, 500);
+        }, 3000);
     }
 }
 
@@ -299,6 +316,20 @@ function initLazyLoadImages() {
             img.classList.remove("lazy-load");
         }
     });
+}
+
+/**
+ * Global image error handler - replaces broken images with a placeholder.
+ * Attach via: <img onerror="handleImageError(this)" ...>
+ */
+function handleImageError(img) {
+    if (img.dataset.fallbackAttempted) return;
+    img.dataset.fallbackAttempted = "true";
+    
+    // Use a simple SVG placeholder as fallback
+    img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%23f4f4f5' width='400' height='400'/%3E%3Ctext fill='%2371717a' font-family='Arial' font-size='16' text-anchor='middle' x='200' y='200'%3EImage Unavailable%3C/text%3E%3C/svg%3E";
+    img.style.objectFit = "contain";
+    img.style.background = "#f4f4f5";
 }
 
 function addToCart(id, name, price, image) {

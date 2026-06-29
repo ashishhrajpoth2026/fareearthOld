@@ -160,7 +160,8 @@ function renderProducts(products) {
                     src="${product.image}"
                     alt="${product.productName}"
                     class="product-image"
-                    loading="lazy">
+                    loading="lazy"
+                    onerror="handleImageError(this)">
             </a>
             <div class="product-card-info">
                 <span class="category">${product.category}</span>

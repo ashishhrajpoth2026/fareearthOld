@@ -16,7 +16,7 @@ const CONFIG = {
     // =========================================================================
     
     /** Google Apps Script Web App URL (deployed production endpoint) */
-    API_URL: "https://script.google.com/macros/s/AKfycbwZIcqKZhOuXpgY291xMY4IR3ps_L6RQ_FViEKBYwo5ul3mP_yUxMYRUJMqB9W6d4CC/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbxQutCt7e-33lIyKtsXcAzZCSiBQ4GJ4vWEnExAHIiPWkzCJMBU0pd57LOOFh1Mff0t/exec",
     
     /** Local products JSON file (fallback/static data source) */
     PRODUCTS_JSON_URL: "products.json",
