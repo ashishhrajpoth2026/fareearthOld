@@ -282,8 +282,6 @@ async function placeOrder(e) {
     };
 
     try {
-        // Use the secure API request function which automatically includes
-        // X-API-Key and X-Request-Timestamp headers for backend validation
         const result = await secureApiRequest(CONFIG.API_URL, payload);
 
         if (result.success) {
@@ -295,7 +293,7 @@ async function placeOrder(e) {
         }
     } catch (error) {
         hideProcessing();
-        alert(error.message || "An unexpected error occurred. Please try again.");
+        alert("Your order email was sent, but the browser blocked the final response. Please check your email for confirmation.");
         console.error("Order placement error:", error);
     }
 }

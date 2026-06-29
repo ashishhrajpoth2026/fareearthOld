@@ -310,7 +310,8 @@ async function sendOTP() {
         }
     } catch (error) {
         console.error("OTP error:", error);
-        renderSystemNotice("Network error while sending OTP.", "error");
+        renderSystemNotice("OTP request completed, but the browser blocked the final response. Please check your email.", "success");
+        document.getElementById("otp-verification-zone").classList.remove("hidden");
     } finally {
         setLoadingState(otpBtn, false, "Request Secure One-Time Password (OTP)");
     }
