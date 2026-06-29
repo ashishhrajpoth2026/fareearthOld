@@ -4,12 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop — Fly On Earth</title>
-    <meta name="description" content="Browse our curated collection of premium products at Fly On Earth.">
+    <title>Shop — Fareearth Premium Products</title>
+    <meta name="description" content="Browse our curated collection of premium gaming chairs, office furniture, and electronics at Fareearth. Fast shipping and secure checkout.">
+    <meta name="keywords" content="gaming chairs, office furniture, electronics, shop online, Fareearth">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://fareearth.in/shop">
+    <meta property="og:title" content="Shop — Fareearth Premium Products">
+    <meta property="og:description" content="Browse our curated collection of premium products at Fareearth.">
+    <meta property="og:url" content="https://fareearth.in/shop">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Fareearth">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/preloader.css?v=1">
+    <script src="js/preloader.js?v=3"></script>
 </head>
 <body>
 
@@ -19,33 +29,25 @@
 
 <div class="container">
 
-<h1>Shop Products</h1>
+<div class="section-header-row">
+    <div>
+        <h1>Shop Products</h1>
+        <p>Discover our curated collection of premium products</p>
+    </div>
+</div>
 
 <div class="shop-filters">
 
-<input
-type="text"
-id="search"
-placeholder="Search Products…">
+<input type="text" id="search" placeholder="Search Products…">
 
-<select id="category" title="Filter by category" style="display:none;">
+<select id="category" title="Filter by category">
 <option value="">All Categories</option>
 </select>
 
 <select id="sort" title="Sort by price">
-
-<option value="">
-Sort
-</option>
-
-<option value="low">
-Price Low To High
-</option>
-
-<option value="high">
-Price High To Low
-</option>
-
+    <option value="">Sort</option>
+    <option value="low">Price Low To High</option>
+    <option value="high">Price High To Low</option>
 </select>
 
 </div>
@@ -156,9 +158,9 @@ Price High To Low
 
 <div id="footer-portal"></div>
 
-<script src="js/config.js"></script>
+<script src="js/config.js?v=5"></script>
 <script src="js/productService.js?v=1"></script>
-<script src="js/app.js?v=2"></script>
-<script src="js/shop.js?v=2"></script>
+<script src="js/app.js?v=5"></script>
+<script src="js/shop.js?v=3"></script>
 </body>
 </html>

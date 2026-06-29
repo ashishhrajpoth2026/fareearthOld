@@ -1,0 +1,18 @@
+# =============================================================================
+# FAREEARTH - Robots.txt
+# =============================================================================
+# Production: https://fareearth.in
+# =============================================================================
+
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin-login
+Disallow: /admin-dashboard
+
+# Disallow success page (order confirmation pages)
+Disallow: /success
+
+# Sitemap
+Sitemap: https://fareearth.in/sitemap.xml

@@ -1,18 +1,46 @@
+/**
+ * =============================================================================
+ * FAREEARTH - Application Core Module
+ * =============================================================================
+ * Handles global layout components (header/footer), cart management,
+ * navigation, and utility functions.
+ * 
+ * @author Fareearth Dev Team
+ * @version 2.1.0
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
     initializeGlobalLayoutComponents();
 });
 
+/**
+ * Returns the correct base path for asset loading.
+ * 
+ * For custom domain (fareearth.in): always returns '/' since all assets
+ * are served from the root.
+ * 
+ * For GitHub Pages subpath (username.github.io/repo/): detects the repo
+ * name from the URL path and returns it as the base path.
+ * 
+ * Detection logic:
+ * - If hostname contains 'github.io', check if first path segment looks
+ *   like a repo name (no file extension) and use it as base path.
+ * - For all other cases (custom domain, local dev), return '/'.
+ */
 function getBasePath() {
-    const path = window.location.pathname;
-    const parts = path.split('/').filter(Boolean);
+    var path = window.location.pathname;
+    var parts = path.split('/').filter(Boolean);
 
-    // Detect GitHub Pages subpath like /fareearth/
-    // If first path segment is not an HTML file, it's likely a subpath
-    if (parts.length > 0 && !parts[0].includes('.html') && !parts[0].includes('.')) {
-        return '/' + parts[0] + '/';
+    // Only use subpath detection for GitHub Pages (username.github.io/repo)
+    if (window.location.hostname.indexOf('github.io') !== -1) {
+        if (parts.length > 0 && 
+            parts[0].indexOf('.html') === -1 && 
+            parts[0].indexOf('.') === -1) {
+            return '/' + parts[0] + '/';
+        }
     }
 
-    // Running locally (file:// or no subpath)
+    // Custom domain (fareearth.in), local development, or any other case
     return '/';
 }
 

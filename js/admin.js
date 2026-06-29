@@ -1,3 +1,15 @@
+/**
+ * =============================================================================
+ * FAREEARTH - Admin Dashboard Module
+ * =============================================================================
+ * Handles admin authentication, order management, dashboard stats, and exports.
+ * All API requests use the secureApiRequest() function which automatically
+ * includes authentication headers (API key, timestamp) for backend validation.
+ * 
+ * @author Fareearth Dev Team
+ * @version 2.1.0
+ */
+
 let ordersData = [];
 let leadsData = [];
 let activeAdminTab = "orders";
@@ -36,8 +48,7 @@ function getCachedData(key) {
 function setCachedData(key, data) {
     try {
         sessionStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
-    } catch {
-    }
+    } catch {}
 }
 
 function showSkeleton(id) {
@@ -173,6 +184,63 @@ function validateCredentialsLocal(email, password = null) {
     return isValid;
 }
 
+/**
+ * Sends a secure API request to the Google Apps Script backend.
+ * Automatically includes all required security headers:
+ * - X-API-Key: Shared secret for authentication
+ * - X-Request-Timestamp: Current timestamp for replay protection
+ *
+ * @param {string} url - The API endpoint URL
+ * @param {Object} data - The payload to send
+ * @param {string} [method='POST'] - HTTP method
+ * @returns {Promise<Object>} The parsed JSON response
+ */
+async function secureApiRequest(url, data, method = 'POST') {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': CONFIG.API_KEY,
+                'X-Request-Timestamp': String(Date.now())
+            },
+            body: method === 'POST' ? JSON.stringify(data) : undefined,
+            signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            throw new Error('Invalid response format from server');
+        }
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || `HTTP ${response.status}`);
+        }
+
+        return result;
+    } catch (error) {
+        clearTimeout(timeoutId);
+
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out. Please try again.');
+        }
+
+        if (error.message === 'Failed to fetch') {
+            throw new Error('Network error. Please check your connection and try again.');
+        }
+
+        throw error;
+    }
+}
+
 async function login() {
     clearSystemNotice();
     const email = document.getElementById("email").value.trim();
@@ -186,16 +254,11 @@ async function login() {
 
     try {
         setLoadingState(loginBtn, true, "Authenticating...");
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: "adminLogin",
-                email,
-                password
-            })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "adminLogin",
+            email,
+            password
         });
-
-        const result = await response.json();
 
         if (result.success) {
             localStorage.setItem("adminToken", result.token);
@@ -224,22 +287,13 @@ async function sendOTP() {
 
     try {
         setLoadingState(otpBtn, true, "Processing...");
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: "sendOTP",
-                email
-            })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "sendOTP",
+            email
         });
-
-        const result = await response.json();
         
-        if (result.success || response.ok) {
-            if (result.warning) {
-                renderSystemNotice(result.message || "OTP generated but email delivery may be delayed.", "warning");
-            } else {
-                renderSystemNotice(result.message || "OTP sent successfully.", "success");
-            }
+        if (result.success || result.warning) {
+            renderSystemNotice(result.message || "OTP sent successfully.", result.warning ? "warning" : "success");
             document.getElementById("otp-verification-zone").classList.remove("hidden");
         } else {
             renderSystemNotice(result.message || "Failed to send OTP.", "warning");
@@ -268,16 +322,11 @@ async function verifyOTP() {
 
     try {
         setLoadingState(verifyBtn, true, "...");
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: "verifyOTP",
-                email,
-                otp
-            })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "verifyOTP",
+            email,
+            otp
         });
-
-        const result = await response.json();
 
         if (result.success) {
             localStorage.setItem("adminToken", result.token);
@@ -317,15 +366,11 @@ async function authAdmin() {
     }
 
     try {
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: "validateAdminToken",
-                token
-            })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "validateAdminToken",
+            token
         });
 
-        const result = await response.json();
         if (!result.success) {
             logout();
             return false;
@@ -402,12 +447,11 @@ async function loadOrders() {
     }
 
     try {
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({ action: "getOrders", token: getAdminToken() })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "getOrders",
+            token: getAdminToken()
         });
 
-        const result = await response.json();
         ordersData = Array.isArray(result.orders) ? result.orders : [];
         ordersData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
         setCachedData("dashboard_orders", ordersData);
@@ -428,12 +472,11 @@ async function loadOrders() {
 
 async function loadDashboardStats() {
     try {
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({ action: "getDashboardStats", token: getAdminToken() })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "getDashboardStats",
+            token: getAdminToken()
         });
 
-        const result = await response.json();
         if (result.success) {
             setCachedData("dashboard_stats", result.stats);
             DASHBOARD_CACHE.stats = result.stats;
@@ -474,12 +517,11 @@ async function loadContactLeads() {
     }
 
     try {
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({ action: "getContactLeads", token: getAdminToken() })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "getContactLeads",
+            token: getAdminToken()
         });
 
-        const result = await response.json();
         leadsData = Array.isArray(result.leads) ? result.leads : [];
         setCachedData("dashboard_leads", leadsData);
         DASHBOARD_CACHE.leads = leadsData;
@@ -732,16 +774,12 @@ function applyExportFilters() {
 
 async function handleOrderStatusChange(orderId, newStatus) {
     try {
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: "updateOrderStatus",
-                token: getAdminToken(),
-                orderId: orderId,
-                status: newStatus
-            })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "updateOrderStatus",
+            token: getAdminToken(),
+            orderId: orderId,
+            status: newStatus
         });
-        const result = await response.json();
         if (!result.success) {
             alert("Failed to update order status: " + (result.message || "Unknown error"));
             loadOrders();
@@ -764,18 +802,14 @@ async function downloadOrdersExport() {
     exportStatus.innerText = "Fetching order data...";
 
     try {
-        const response = await fetch(CONFIG.API_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: "exportOrdersCSV",
-                token: getAdminToken(),
-                status: statusFilter || "",
-                fromDate: fromDate || "",
-                toDate: toDate || ""
-            })
+        const result = await secureApiRequest(CONFIG.API_URL, {
+            action: "exportOrdersCSV",
+            token: getAdminToken(),
+            status: statusFilter || "",
+            fromDate: fromDate || "",
+            toDate: toDate || ""
         });
 
-        const result = await response.json();
         if (result.success && result.csvContent) {
             let csvData = result.csvContent;
 
