@@ -121,19 +121,10 @@
             };
 
             try {
-                // Include auth credentials in the body to avoid CORS preflight
-                // (text/plain is a simple content type that doesn't trigger preflight)
                 const bodyData = { ...data, apiKey: CONFIG.API_KEY, timestamp: Date.now() };
-                const response = await fetch(CONFIG.API_URL, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'text/plain'
-                    },
-                    body: JSON.stringify(bodyData)
-                });
-                const result = await response.json();
+                const result = await jsonpApiRequest(CONFIG.API_URL, bodyData);
 
-                if (result.success) {
+                if (result && result.success) {
                     form.reset();
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;

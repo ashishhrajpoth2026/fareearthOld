@@ -16,7 +16,7 @@ const CONFIG = {
     // =========================================================================
     
     /** Direct Apps Script web app URL for GitHub Pages + Apps Script only setup */
-    API_URL: "https://script.google.com/macros/s/AKfycbwjLEEpy6ZprlpRBkw3J4S-AN6yr0Faqb9dB_2mfGczy-fTm-Pb7bcwQVnMhJXk_kU/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbzg961sVJBTSFvm4eWew8jPnFsCtHMisy39dgysocRXGtsSIwGXmAf6n2pNhPnNWMwN/exec",
     
     /** Local products JSON file (fallback/static data source) */
     PRODUCTS_JSON_URL: "products.json",
@@ -71,3 +71,60 @@ const CONFIG = {
     /** Dashboard cache TTL (in milliseconds) */
     DASHBOARD_CACHE_TTL_MS: 5 * 60 * 1000
 };
+
+function buildApiRequestUrl(url, data) {
+    const payload = { ...(data || {}) };
+    payload.apiKey = CONFIG.API_KEY;
+    payload.timestamp = Date.now();
+
+    const params = new URLSearchParams();
+    Object.entries(payload).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+        if (typeof value === 'object') {
+            params.append(key, JSON.stringify(value));
+        } else {
+            params.append(key, String(value));
+        }
+    });
+
+    return `${url}?${params.toString()}`;
+}
+
+function jsonpApiRequest(url, data, timeoutMs = CONFIG.REQUEST_TIMEOUT_MS) {
+    return new Promise((resolve, reject) => {
+        const callbackName = `fareearth_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const requestUrl = buildApiRequestUrl(url, data);
+        let cleanup;
+
+        const timeoutId = setTimeout(() => {
+            if (cleanup) cleanup();
+            reject(new Error('Request timed out. Please try again.'));
+        }, timeoutMs);
+
+        cleanup = () => {
+            clearTimeout(timeoutId);
+            if (script && script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+            if (window[callbackName]) {
+                delete window[callbackName];
+            }
+        };
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.onerror = () => {
+            if (cleanup) cleanup();
+            reject(new Error('Network error. Please check your connection and try again.'));
+        };
+
+        window[callbackName] = (payload) => {
+            if (cleanup) cleanup();
+            resolve(payload);
+        };
+
+        const separator = requestUrl.includes('?') ? '&' : '?';
+        script.src = `${requestUrl}${separator}callback=${encodeURIComponent(callbackName)}`;
+        document.head.appendChild(script);
+    });
+}

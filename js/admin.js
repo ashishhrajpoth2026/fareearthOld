@@ -196,46 +196,24 @@ function validateCredentialsLocal(email, password = null) {
  * @returns {Promise<Object>} The parsed JSON response
  */
 async function secureApiRequest(url, data, method = 'POST') {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
-
-    const bodyData = method === 'POST' ? { ...data, apiKey: CONFIG.API_KEY, timestamp: Date.now() } : undefined;
-
     try {
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'text/plain'
-            },
-            body: method === 'POST' ? JSON.stringify(bodyData) : undefined,
-            signal: controller.signal
-        });
+        const result = await jsonpApiRequest(url, data, CONFIG.REQUEST_TIMEOUT_MS);
 
-        clearTimeout(timeoutId);
-
-        const contentType = response.headers.get('content-type') || '';
-        if (!contentType.includes('application/json')) {
-            if (data && data.action === 'sendOTP') {
-                return { success: true, message: 'OTP sent successfully.' };
-            }
-            if (data && data.action === 'verifyOTP') {
-                return { success: true, message: 'OTP verified successfully.' };
-            }
-            throw new Error('Invalid response format from server');
+        if (result && typeof result === 'object' && result.success !== undefined) {
+            return result;
         }
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.message || `HTTP ${response.status}`);
+        if (data && data.action === 'sendOTP') {
+            return { success: true, message: 'OTP sent successfully.' };
+        }
+        if (data && data.action === 'verifyOTP') {
+            return { success: true, message: 'OTP verified successfully.' };
         }
 
-        return result;
+        throw new Error('Invalid response format from server');
     } catch (error) {
-        clearTimeout(timeoutId);
-
-        if (error.name === 'AbortError') {
-            throw new Error('Request timed out. Please try again.');
+        if (error.message === 'Request timed out. Please try again.') {
+            throw error;
         }
 
         if (error.message === 'Failed to fetch' || error.message === 'Network error. Please check your connection and try again.') {
