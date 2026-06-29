@@ -15,8 +15,12 @@ const CONFIG = {
     // API & Backend
     // =========================================================================
     
-    /** Google Apps Script Web App URL (deployed production endpoint) */
-    API_URL: "https://script.google.com/macros/s/AKfycbzyyppjWMwm8c4mD9UQXpqZx3IlNRn4ciQqbw-wRO8kRaKmK15Cz4GwCemu0Dj8_SuA/exec",
+    /** 
+     * API URL: Uses a local PHP proxy to avoid CORS issues with Google Apps Script.
+     * The proxy forwards requests to the GAS backend and returns the response.
+     * Since the proxy is on the same domain, no CORS headers are needed.
+     */
+    API_URL: "/api-proxy.php",
     
     /** Local products JSON file (fallback/static data source) */
     PRODUCTS_JSON_URL: "products.json",
