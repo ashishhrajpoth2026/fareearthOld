@@ -199,16 +199,17 @@ async function secureApiRequest(url, data, method = 'POST') {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
 
+    // Include auth credentials in the body to avoid CORS preflight
+    // (text/plain is a simple content type that doesn't trigger preflight)
+    const bodyData = method === 'POST' ? { ...data, apiKey: CONFIG.API_KEY, timestamp: Date.now() } : undefined;
+
     try {
         const response = await fetch(url, {
             method: method,
-            mode: 'cors',
             headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': CONFIG.API_KEY,
-                'X-Request-Timestamp': String(Date.now())
+                'Content-Type': 'text/plain'
             },
-            body: method === 'POST' ? JSON.stringify(data) : undefined,
+            body: method === 'POST' ? JSON.stringify(bodyData) : undefined,
             signal: controller.signal
         });
 

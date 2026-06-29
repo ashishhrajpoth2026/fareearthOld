@@ -122,15 +122,15 @@
             };
 
             try {
+                // Include auth credentials in the body to avoid CORS preflight
+                // (text/plain is a simple content type that doesn't trigger preflight)
+                const bodyData = { ...data, apiKey: CONFIG.API_KEY, timestamp: Date.now() };
                 const response = await fetch(CONFIG.API_URL, {
                     method: "POST",
-                    mode: 'cors',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-Key': CONFIG.API_KEY,
-                        'X-Request-Timestamp': String(Date.now())
+                        'Content-Type': 'text/plain'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(bodyData)
                 });
                 const result = await response.json();
 
